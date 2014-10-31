@@ -1,10 +1,10 @@
 require 'rspec'
 require 'parslet/rig/rspec'
-require "./parser"
+require "./lib/md_parser"
 
 
-describe TableParser  do
-  let(:parser) { TableParser.new }
+describe MdParser::TableParser  do
+  let(:parser) { MdParser::TableParser.new }
   
   context "#string" do
     it "should consume 'strings'" do
@@ -41,6 +41,12 @@ describe TableParser  do
   context "#table" do
     it "should consume a table" do
       expect( parser.parse("|ID | Dependencies |\n|---|---|\n|1 | 2 |") )  
+      expect( parser.parse("|ID | Dependencies |\r\n|---|---|\r\n|1 | 2 |\r\n") ).to eq (
+        {:table_table=>{
+          :table_titles=>{
+            :table_row=>[{:table_value=>"ID"}, {:table_value=>"Dependencies"}]},
+          :table_rows=>[
+            {:table_row=>[{:table_value=>"1"}, {:table_value=>"2"}]}]}})   
     end
   end
   

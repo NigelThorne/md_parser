@@ -24,7 +24,7 @@ module MdParser
       rule(:space?)        { space.maybe }
                              
       rule(:eof)           { any.absent? }                    
-      rule(:eol)           { str("\n") | eof }   
+      rule(:eol)           { (str("\r").maybe >> str("\n")) | eof }   
       
       root :table
   end
